@@ -30,7 +30,7 @@ namespace Container.Build
             buildOption.locationPathName = BUILD_WINDOW_PATH+ APP_NAME+".exe";
             buildOption.scenes = GetBuildSceneList();
             buildOption.target = BuildTarget.StandaloneWindows64;
-            buildOption.options = BuildOptions.AutoRunPlayer;
+            //buildOption.options = BuildOptions.AutoRunPlayer;
             BuildPipeline.BuildPlayer(buildOption);
         }
 
