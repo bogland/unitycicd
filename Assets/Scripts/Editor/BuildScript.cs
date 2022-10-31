@@ -10,7 +10,8 @@ namespace Container.Build
     {
         /* App Info */
         private const string APP_NAME = "APPNAME"; //APK ¸íÄª
-        protected const string KEYSTORE_PASSWORD = "********";
+        protected const string KEYSTORE_PASSWORD = "000000";
+        protected const string KEYSTORE_ALIAS = "oh";
         private const string BUILD_BASIC_PATH = "../build/";
         private const string BUILD_ANDROID_PATH = BUILD_BASIC_PATH + "Android/";
         private const string BUILD_WINDOW_PATH = BUILD_BASIC_PATH + "Window/";
@@ -25,6 +26,8 @@ namespace Container.Build
         [MenuItem("Builder/Build/BuildForWindow")]
         public static void BuildForWindow()
         {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows);
+
             BuildPlayerOptions buildOption = new BuildPlayerOptions();
 
             buildOption.locationPathName = BUILD_WINDOW_PATH+ APP_NAME+".exe";
@@ -37,6 +40,8 @@ namespace Container.Build
         [MenuItem("Builder/Build/BuildForAndroid")]
         public static void BuildForAndroid()
         {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.Android);
+
             string fileName = SetPlayerSettingsForAndroid();
 
             BuildPlayerOptions buildOption = new BuildPlayerOptions();
@@ -44,13 +49,15 @@ namespace Container.Build
             buildOption.locationPathName = BUILD_ANDROID_PATH + fileName;
             buildOption.scenes = GetBuildSceneList();
             buildOption.target = BuildTarget.Android;
-            buildOption.options = BuildOptions.AutoRunPlayer;
+            //buildOption.options = BuildOptions.AutoRunPlayer;
             BuildPipeline.BuildPlayer(buildOption);
         }
 
         [MenuItem("Builder/Build/BuildForIOS")]
         public static void BuildForIOS()
         {
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.iOS);
+
             BuildPlayerOptions buildOption = new BuildPlayerOptions();
             buildOption.target = BuildTarget.iOS;
             buildOption.scenes = GetBuildSceneList();
@@ -107,6 +114,7 @@ namespace Container.Build
         protected static string SetPlayerSettingsForAndroid()
         {
             PlayerSettings.Android.keystorePass = KEYSTORE_PASSWORD;
+            PlayerSettings.Android.keyaliasName = KEYSTORE_ALIAS;
             PlayerSettings.Android.keyaliasPass = KEYSTORE_PASSWORD;
             PlayerSettings.Android.targetArchitectures = AndroidArchitecture.ARM64 | AndroidArchitecture.ARMv7;
 

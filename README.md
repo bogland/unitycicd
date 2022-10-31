@@ -39,3 +39,7 @@ https://www.youtube.com/watch?v=V2ejGOY_uJI
 
 - http://34.64.56.48:8181/ provided port:50000 is not reachable 에러
 > agent - configure - Use WebSocket 체크   
+
+# window agent 선택하는 방법
+Window Agent 의 Label을 Item에서 지정  
+> Restrict where this project can be run - Label Extression "windows"
