@@ -26,6 +26,8 @@ namespace Container.Build
         [MenuItem("Builder/Build/BuildForWindow")]
         public static void BuildForWindow()
         {
+            TextAsset text = (TextAsset)AssetDatabase.LoadAssetAtPath("Assets/Resources/version.txt", typeof(TextAsset));
+            PlayerSettings.bundleVersion = text.text;
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows);
 
             BuildPlayerOptions buildOption = new BuildPlayerOptions();
@@ -36,6 +38,21 @@ namespace Container.Build
             //buildOption.options = BuildOptions.AutoRunPlayer;
             BuildPipeline.BuildPlayer(buildOption);
         }
+
+        [MenuItem("Builder/Build/ExportPackage")]
+        static void ExportPackage()
+        {
+            var exportedPackageAssetList = new List<string>();
+
+            //Add Prefabs folder into the asset list
+            exportedPackageAssetList.Add("Assets/Scenes");
+            exportedPackageAssetList.Add("Assets/Resources");
+            exportedPackageAssetList.Add("Assets/Scripts");
+            //Export Shaders and Prefabs with their dependencies into a .unitypackage
+            AssetDatabase.ExportPackage(exportedPackageAssetList.ToArray(), "ShadersAndPrefabsWithDependencies.unitypackage",
+                ExportPackageOptions.Recurse | ExportPackageOptions.IncludeDependencies);
+        }
+
 
         [MenuItem("Builder/Build/BuildForAndroid")]
         public static void BuildForAndroid()
