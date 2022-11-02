@@ -9,13 +9,15 @@ namespace Container.Build
     public class BuildScript
     {
         /* App Info */
-        private const string APP_NAME = "APPNAME"; //APK 명칭
+        static private string APP_NAME { get { return PlayerSettings.productName; } } //APK 명칭
         protected const string KEYSTORE_PASSWORD = "000000";
         protected const string KEYSTORE_ALIAS = "oh";
-        private const string BUILD_BASIC_PATH = "../build/";
-        private const string BUILD_ANDROID_PATH = BUILD_BASIC_PATH + "Android/";
-        private const string BUILD_WINDOW_PATH = BUILD_BASIC_PATH + "Window/";
-        private const string BUILD_IOS_PATH = BUILD_BASIC_PATH + "Ios/";
+        static private string PROJECT_FOLDER_PATH { get { return Path.GetFullPath(Path.Combine(Application.dataPath, "../")); } }
+        static private string PROJECT_FOLDER_NAME { get { return new DirectoryInfo(PROJECT_FOLDER_PATH).Name; } }
+        static private string BUILD_BASIC_PATH = Path.GetFullPath(Path.Combine(PROJECT_FOLDER_PATH, "../build/"));
+        static private string BUILD_ANDROID_PATH { get { return BUILD_BASIC_PATH + PROJECT_FOLDER_NAME + "/Android/"; } }
+        static private string BUILD_WINDOW_PATH { get { return BUILD_BASIC_PATH + PROJECT_FOLDER_NAME + "/Window/"; } }
+        static private string BUILD_IOS_PATH { get { return BUILD_BASIC_PATH + PROJECT_FOLDER_NAME + "/Ios/"; } }
 
         /* IOS 권한 메세지 정보 */
         private const string PHOTO_LIBRARY_USAGE_DESCRIPTION = "앱과 상호 작용하려면 사진 액세스 권한이 필요합니다.";
@@ -27,12 +29,12 @@ namespace Container.Build
         public static void BuildForWindow()
         {
             TextAsset text = (TextAsset)AssetDatabase.LoadAssetAtPath("Assets/Resources/version.txt", typeof(TextAsset));
-            PlayerSettings.bundleVersion = text.text;
+            if (text != null)
+                PlayerSettings.bundleVersion = text.text;
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneWindows);
 
             BuildPlayerOptions buildOption = new BuildPlayerOptions();
-
-            buildOption.locationPathName = BUILD_WINDOW_PATH+ APP_NAME+".exe";
+            buildOption.locationPathName = BUILD_WINDOW_PATH + APP_NAME + ".exe";
             buildOption.scenes = GetBuildSceneList();
             buildOption.target = BuildTarget.StandaloneWindows64;
             //buildOption.options = BuildOptions.AutoRunPlayer;
